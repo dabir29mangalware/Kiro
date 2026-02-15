@@ -360,9 +360,378 @@ Pending → Acknowledged → In Progress → Resolved → Verified Closed
 - CPGRAMS API is stable and documented
 
 ### 6.2 Dependencies
+
+#### 6.2.1 Government & Administrative
 - Government approval for CPGRAMS integration
 - Municipal cooperation for ward officer onboarding
-- Third-party services: Maps API, SMS gateway, Cloud hosting
+- Access to ward boundary data and officer assignments
+
+#### 6.2.2 Third-Party Services
+- **Maps API:** Google Maps Platform / OpenStreetMap
+- **SMS Gateway:** Twilio / AWS SNS for OTP verification
+- **Cloud Hosting:** AWS / Azure / Google Cloud (India region)
+- **Push Notifications:** Firebase Cloud Messaging (FCM) / Apple Push Notification Service (APNS)
+- **CDN:** CloudFront / Cloudflare for image delivery
+- **Email Service:** SendGrid / AWS SES for notifications
+
+#### 6.2.3 Spring Boot Backend Dependencies
+
+**Core Framework:**
+```xml
+<!-- Spring Boot Starter Parent -->
+<parent>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <version>3.2.0</version>
+</parent>
+
+<!-- Spring Boot Web -->
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-web</artifactId>
+</dependency>
+
+<!-- Spring Boot Security -->
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-security</artifactId>
+</dependency>
+
+<!-- Spring Boot Validation -->
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-validation</artifactId>
+</dependency>
+```
+
+**Database Dependencies:**
+```xml
+<!-- Spring Data JPA -->
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-data-jpa</artifactId>
+</dependency>
+
+<!-- MySQL Connector -->
+<dependency>
+    <groupId>com.mysql</groupId>
+    <artifactId>mysql-connector-j</artifactId>
+    <version>8.2.0</version>
+    <scope>runtime</scope>
+</dependency>
+
+<!-- PostgreSQL Driver (Alternative/Additional) -->
+<dependency>
+    <groupId>org.postgresql</groupId>
+    <artifactId>postgresql</artifactId>
+    <scope>runtime</scope>
+</dependency>
+
+<!-- HikariCP Connection Pool (included in spring-boot-starter-data-jpa) -->
+<dependency>
+    <groupId>com.zaxxer</groupId>
+    <artifactId>HikariCP</artifactId>
+</dependency>
+
+<!-- Flyway for Database Migration -->
+<dependency>
+    <groupId>org.flywaydb</groupId>
+    <artifactId>flyway-core</artifactId>
+</dependency>
+
+<!-- Flyway MySQL Support -->
+<dependency>
+    <groupId>org.flywaydb</groupId>
+    <artifactId>flyway-mysql</artifactId>
+</dependency>
+```
+
+**Spatial/GIS Support:**
+```xml
+<!-- Hibernate Spatial for Geographic Data -->
+<dependency>
+    <groupId>org.hibernate.orm</groupId>
+    <artifactId>hibernate-spatial</artifactId>
+    <version>6.4.0.Final</version>
+</dependency>
+
+<!-- JTS Topology Suite for Geometry -->
+<dependency>
+    <groupId>org.locationtech.jts</groupId>
+    <artifactId>jts-core</artifactId>
+    <version>1.19.0</version>
+</dependency>
+```
+
+**Caching:**
+```xml
+<!-- Spring Boot Cache -->
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-cache</artifactId>
+</dependency>
+
+<!-- Redis for Distributed Caching -->
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-data-redis</artifactId>
+</dependency>
+
+<!-- Lettuce Redis Client (included in spring-boot-starter-data-redis) -->
+<dependency>
+    <groupId>io.lettuce</groupId>
+    <artifactId>lettuce-core</artifactId>
+</dependency>
+```
+
+**Authentication & Security:**
+```xml
+<!-- JWT Token Support -->
+<dependency>
+    <groupId>io.jsonwebtoken</groupId>
+    <artifactId>jjwt-api</artifactId>
+    <version>0.12.3</version>
+</dependency>
+<dependency>
+    <groupId>io.jsonwebtoken</groupId>
+    <artifactId>jjwt-impl</artifactId>
+    <version>0.12.3</version>
+    <scope>runtime</scope>
+</dependency>
+<dependency>
+    <groupId>io.jsonwebtoken</groupId>
+    <artifactId>jjwt-jackson</artifactId>
+    <version>0.12.3</version>
+    <scope>runtime</scope>
+</dependency>
+
+<!-- OAuth2 Resource Server -->
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
+</dependency>
+```
+
+**File Storage & Processing:**
+```xml
+<!-- AWS SDK for S3 -->
+<dependency>
+    <groupId>software.amazon.awssdk</groupId>
+    <artifactId>s3</artifactId>
+    <version>2.21.0</version>
+</dependency>
+
+<!-- Apache Commons FileUpload -->
+<dependency>
+    <groupId>commons-fileupload</groupId>
+    <artifactId>commons-fileupload</artifactId>
+    <version>1.5</version>
+</dependency>
+
+<!-- Image Processing (Thumbnails) -->
+<dependency>
+    <groupId>net.coobird</groupId>
+    <artifactId>thumbnailator</artifactId>
+    <version>0.4.20</version>
+</dependency>
+```
+
+**REST API & Integration:**
+```xml
+<!-- Spring Boot WebClient for HTTP Calls -->
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-webflux</artifactId>
+</dependency>
+
+<!-- OpenAPI/Swagger Documentation -->
+<dependency>
+    <groupId>org.springdoc</groupId>
+    <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+    <version>2.3.0</version>
+</dependency>
+
+<!-- Jackson for JSON Processing -->
+<dependency>
+    <groupId>com.fasterxml.jackson.core</groupId>
+    <artifactId>jackson-databind</artifactId>
+</dependency>
+```
+
+**Messaging & Notifications:**
+```xml
+<!-- Spring Boot Mail -->
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-mail</artifactId>
+</dependency>
+
+<!-- Firebase Admin SDK for Push Notifications -->
+<dependency>
+    <groupId>com.google.firebase</groupId>
+    <artifactId>firebase-admin</artifactId>
+    <version>9.2.0</version>
+</dependency>
+
+<!-- Twilio SDK for SMS -->
+<dependency>
+    <groupId>com.twilio.sdk</groupId>
+    <artifactId>twilio</artifactId>
+    <version>9.14.1</version>
+</dependency>
+```
+
+**Monitoring & Logging:**
+```xml
+<!-- Spring Boot Actuator -->
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-actuator</artifactId>
+</dependency>
+
+<!-- Micrometer for Metrics -->
+<dependency>
+    <groupId>io.micrometer</groupId>
+    <artifactId>micrometer-registry-prometheus</artifactId>
+</dependency>
+
+<!-- Logback (included in spring-boot-starter-logging) -->
+<dependency>
+    <groupId>ch.qos.logback</groupId>
+    <artifactId>logback-classic</artifactId>
+</dependency>
+
+<!-- SLF4J API -->
+<dependency>
+    <groupId>org.slf4j</groupId>
+    <artifactId>slf4j-api</artifactId>
+</dependency>
+```
+
+**Testing:**
+```xml
+<!-- Spring Boot Test -->
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-test</artifactId>
+    <scope>test</scope>
+</dependency>
+
+<!-- JUnit 5 (included in spring-boot-starter-test) -->
+<dependency>
+    <groupId>org.junit.jupiter</groupId>
+    <artifactId>junit-jupiter</artifactId>
+    <scope>test</scope>
+</dependency>
+
+<!-- Mockito -->
+<dependency>
+    <groupId>org.mockito</groupId>
+    <artifactId>mockito-core</artifactId>
+    <scope>test</scope>
+</dependency>
+
+<!-- H2 Database for Testing -->
+<dependency>
+    <groupId>com.h2database</groupId>
+    <artifactId>h2</artifactId>
+    <scope>test</scope>
+</dependency>
+
+<!-- TestContainers for Integration Testing -->
+<dependency>
+    <groupId>org.testcontainers</groupId>
+    <artifactId>testcontainers</artifactId>
+    <version>1.19.3</version>
+    <scope>test</scope>
+</dependency>
+<dependency>
+    <groupId>org.testcontainers</groupId>
+    <artifactId>mysql</artifactId>
+    <version>1.19.3</version>
+    <scope>test</scope>
+</dependency>
+```
+
+**Utilities:**
+```xml
+<!-- Lombok for Boilerplate Reduction -->
+<dependency>
+    <groupId>org.projectlombok</groupId>
+    <artifactId>lombok</artifactId>
+    <optional>true</optional>
+</dependency>
+
+<!-- MapStruct for DTO Mapping -->
+<dependency>
+    <groupId>org.mapstruct</groupId>
+    <artifactId>mapstruct</artifactId>
+    <version>1.5.5.Final</version>
+</dependency>
+<dependency>
+    <groupId>org.mapstruct</groupId>
+    <artifactId>mapstruct-processor</artifactId>
+    <version>1.5.5.Final</version>
+    <scope>provided</scope>
+</dependency>
+
+<!-- Apache Commons Lang -->
+<dependency>
+    <groupId>org.apache.commons</groupId>
+    <artifactId>commons-lang3</artifactId>
+</dependency>
+
+<!-- Google Guava -->
+<dependency>
+    <groupId>com.google.guava</groupId>
+    <artifactId>guava</artifactId>
+    <version>32.1.3-jre</version>
+</dependency>
+```
+
+#### 6.2.4 Database Configuration
+
+**MySQL Configuration (application.yml):**
+```yaml
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/citysathi?useSSL=false&serverTimezone=Asia/Kolkata
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      maximum-pool-size: 20
+      minimum-idle: 5
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+  
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+        format_sql: true
+        use_sql_comments: true
+        jdbc:
+          batch_size: 20
+        order_inserts: true
+        order_updates: true
+  
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+    locations: classpath:db/migration
+```
+
+**Database Schema Requirements:**
+- MySQL 8.0+ or PostgreSQL 13+
+- Support for spatial data types (POINT, POLYGON for geographic coordinates)
+- UTF-8 character encoding for multi-language support
+- Minimum storage: 100GB (scalable)
+- Backup strategy: Daily automated backups with 30-day retention
 
 ---
 
